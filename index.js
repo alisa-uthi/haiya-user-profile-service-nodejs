@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const passport = require('passport')
 const morgan = require('morgan')
+var connection = require('./config/database')
 const app = express()
 
 if(process.env.NODE_ENV != 'production'){
@@ -10,30 +10,23 @@ if(process.env.NODE_ENV != 'production'){
 }
 
 // Connect to database
-require('./config/database').dbConnection
+connection
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
 app.use('/public', express.static('./public'))
 
-// Express session
-const expressSession = require('express-session')({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-})
-app.use(expressSession)
-
 // Routes
-const authRoute = require('./routes/auth')
-const userRoute = require('./routes/user')
-const addressRoute = require('./routes/address')
+app.get('/', (req, res) => {
+    connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+        if (error) throw error;
+        console.log('The solution is: ', results[0].solution);
+      })
+})
 
-app.use('/api/auth', authRoute)
-app.use('/api/user', userRoute)
-app.use('/api/address', addressRoute)
+const PORT = process.env.PORT || 8000
 
-app.listen(process.env.PORT || 8080, () => {
-    console.log(`Server starts at port ${process.env.PORT || 8080}`)
+app.listen(PORT, () => {
+    console.log(`User Profile Service listening on ${PORT}`)
 })

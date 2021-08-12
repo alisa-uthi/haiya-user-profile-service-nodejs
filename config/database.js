@@ -1,35 +1,25 @@
-const { Connection } = require("tedious");
+var mysql      = require('mysql2');
 
-// Create connection to database
-const config = {
-  authentication: {
-    options: {
-      userName: process.env.DB_USER, 
-      password: process.env.DB_PASSWORD 
-    },
-    type: "default"
-  },
-  server: process.env.DB_SERVER_NAME, 
-  options: {
-    database: process.env.DB_NAME, 
-    encrypt: true,
-    rowCollectionOnDone: true
-  }
+var mysqlHost = process.env.MYSQL_HOST || 'localhost';
+var mysqlPort = process.env.MYSQL_PORT || '3306';
+var mysqlUser = process.env.MYSQL_USER || 'root';
+var mysqlPass = process.env.MYSQL_PASS || 'root';
+var mysqlDB   = process.env.MYSQL_DB   || 'node_db';
+
+var connectionOptions = {
+  host: mysqlHost,
+  port: mysqlPort,
+  user: mysqlUser,
+  password: mysqlPass,
+  database: mysqlDB
 };
 
-const connection = new Connection(config);
+var connection = mysql.createConnection(connectionOptions);
 
-// Attempt to connect and execute queries if connection goes through
-connection.on("connect", err => {
-  if (err) {
-    console.error(err.message);
-  } else {
-    console.log("Database is running...")
-  }
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log("User Profile Service DB is connected!");
 });
-
-module.exports = {
-  dbConnecttion: connection.connect(),
-  connection: connection
-};
-
+ 
+module.exports = connection
+ 
