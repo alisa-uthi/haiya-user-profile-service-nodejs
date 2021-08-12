@@ -11,7 +11,7 @@ const comparePassword = (password, hashedPassword) => {
 
 export const signup = async (req) => {
     let { title, firstname, lastname, dob, gender, phone, height, weight, email, password, address, drugAllergy, congenitalDisease } = req.body
-    
+
     const userId = await userService.insertPerson({
         title, firstname, lastname, dob, gender, phone, height, weight, email, password,
     })
@@ -33,6 +33,9 @@ export const signup = async (req) => {
             await congenitalDiseaseService.insertCongenitalDisease(congenital, userId)
         })
     }
-    
-    return "Sign up successfully"
+
+    const result = await userService.getUserById(userId)
+
+    return result
 }
+
