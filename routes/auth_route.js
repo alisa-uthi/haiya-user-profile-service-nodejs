@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const authService = require('../services/auth_service')
 
+// Sign up
 router.post('/signup', async (req, res) => {
     try {
         const result = await authService.signup(req)

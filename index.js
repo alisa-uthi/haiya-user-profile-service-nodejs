@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const path = require('path')
 const connection = require('./config/database')
 const app = express()
 
@@ -15,12 +16,14 @@ connection
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 app.use(cors())
-app.use('/public', express.static('./public'))
+// app.use('/public', express.static('./public'))
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(__dirname+'/public'));
+app.use('/public/uploads', express.static(__dirname + '/public/uploads', { maxAge: '1m' }));
 
 // Routes
-const authRoute = require('./routes/auth_route')
-
-app.use('/auth', authRoute)
+app.use('/auth', require('./routes/auth_route'))
+app.use('/user', require('./routes/user_route'))
 
 
 app.get('/', async (req, res) => {
