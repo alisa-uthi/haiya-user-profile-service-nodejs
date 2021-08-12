@@ -11,15 +11,17 @@ var connectionOptions = {
   port: mysqlPort,
   user: mysqlUser,
   password: mysqlPass,
-  database: mysqlDB
+  database: mysqlDB,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  dateStrings: true,
+  multipleStatements: true,
 };
 
-var connection = mysql.createConnection(connectionOptions);
+const connection = mysql.createPool(connectionOptions);
 
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("User Profile Service DB is connected!");
-});
+console.log("User Profile Service DB is connected!");
  
 module.exports = connection
  

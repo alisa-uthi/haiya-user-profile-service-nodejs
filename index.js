@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-var connection = require('./config/database')
+const connection = require('./config/database')
 const app = express()
 
 if(process.env.NODE_ENV != 'production'){
@@ -18,11 +18,16 @@ app.use(cors())
 app.use('/public', express.static('./public'))
 
 // Routes
-app.get('/', (req, res) => {
-    connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-        if (error) throw error;
-        console.log('The solution is: ', results[0].solution);
-      })
+const authRoute = require('./routes/auth_route')
+
+app.use('/auth', authRoute)
+
+
+app.get('/', async (req, res) => {
+    connection.query('show databases; show tables;', (err, results, fields) => {
+        if(err) return res.json({message: err.message})
+        return res.json({results})
+    });
 })
 
 const PORT = process.env.PORT || 8000

@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
     "watch": "babel-watch -L index.js"
   },
   "keywords": [],
@@ -16,17 +15,15 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.15.0",
     "babel-plugin-module-resolver": "^4.1.0",
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "multer": "^1.4.3",
-    "mysql": "^2.18.1",
     "mysql2": "^2.3.0"
   },
   "devDependencies": {
     "babel-watch": "^7.5.0",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.12"
+    "morgan": "^1.10.0"
   }
 }
