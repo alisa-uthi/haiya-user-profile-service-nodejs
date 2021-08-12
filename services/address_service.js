@@ -14,3 +14,20 @@ export const insertAddress = async (address) => {
         throw new Error(`Insert Address: ${err.message}`)
     }
 }
+
+export const getAddressByUserId = async (id) => {
+    let query = 'SELECT a.ID, a.Addr_Name, a.Addr_Location, a.Addr_AdditionalInfo, a.Addr_Latitude, a.Addr_Longitude '
+    query += 'FROM Address a '
+    query += 'INNER JOIN Personal_Addr pa ON pa.Psn_ID = ? '
+    query += `WHERE pa.FlagDelete = 'N';`
+    
+    try {
+        const result = await connection.promise().execute(
+            query,
+            [id],
+        );
+        return result[0]
+    } catch (err) {
+        throw new Error(`Get Profile Image: ${err.message}`)
+    }
+}

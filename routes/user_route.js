@@ -2,12 +2,29 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 const upload = require('../config/multer')
+
 const userService = require('../services/user_service')
+const addressService = require('../services/address_service')
+const drugAllergyService = require('../services/drug_allergy_service')
+const congenitalDiseaseService = require('../services/congenital_service')
 
 // Get User by ID
 router.get('/:userId', async (req, res) => {
     try {
-        const result = await userService.getUserById(req.params.userId)
+        const userId = req.params.userId
+
+        const user = await userService.getUserById(userId)
+        const address = await addressService.getAddressByUserId(userId)
+        const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(userId)
+        const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(userId)
+        
+        const result = {
+          user,
+          address,
+          drugAllergy,
+          congenitalDisease
+        }
+
         res.status(200).json({ data: result })
     } catch (error) {
         res.status(500).json({ error: error.message })

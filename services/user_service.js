@@ -19,7 +19,6 @@ export const insertPerson = async (data) => {
                 data.height, data.weight, data.email, hashedPassword, data.phone,
             ],
         );
-    
         return result[0].insertId
     } catch (err) {
         throw new Error(`Insert Person: ${err.message}`)
@@ -27,15 +26,15 @@ export const insertPerson = async (data) => {
 }
 
 export const getUserById = async (id) => {
-    let query = 'SELECT ID, Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Phone, Psn_Image '
-    query += 'FROM Person WHERE ID = ? ;'
+    let query = ''
+    query += 'SELECT ID, Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Phone, Psn_Image '
+    query += 'FROM Person WHERE ID = ?;'
     
     try {
         const result = await connection.promise().execute(
             query,
             [id],
         );
-    
         return result[0][0]
     } catch (err) {
         throw new Error(`Get User by id: ${err.message}`)
@@ -50,8 +49,7 @@ export const updateProfileImage = async (id, imagePath) => {
             query,
             [imagePath, id],
         );
-    console.log(result)
-        return result
+        return result[0][0]
     } catch (err) {
         throw new Error(`Update Profile Image: ${err.message}`)
     }
@@ -65,7 +63,6 @@ export const getProfileImage = async (id) => {
             query,
             [id],
         );
-        
         return result[0][0]
     } catch (err) {
         throw new Error(`Get Profile Image: ${err.message}`)
@@ -80,7 +77,6 @@ export const getUserByEmail = async (email) => {
             query,
             [email],
         );
-        
         return result[0][0]
     } catch (err) {
         throw new Error(`Get User By Email: ${err.message}`)

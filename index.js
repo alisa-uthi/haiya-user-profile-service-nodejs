@@ -27,6 +27,7 @@ require('./config/passport')
 // Routes
 app.use('/auth', require('./routes/auth_route'))
 app.use('/user', require('./routes/user_route'))
+app.use('/drug-allergy', require('./routes/drug_allergy_route'))
 
 
 app.get('/', async (req, res) => {
