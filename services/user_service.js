@@ -71,3 +71,18 @@ export const getProfileImage = async (id) => {
         throw new Error(`Get Profile Image: ${err.message}`)
     }
 }
+
+export const getUserByEmail = async (email) => {
+    let query = 'SELECT ID, Psn_Email, Psn_Password FROM Person WHERE Psn_Email = ? ;'
+    
+    try {
+        const result = await connection.promise().execute(
+            query,
+            [email],
+        );
+        
+        return result[0][0]
+    } catch (err) {
+        throw new Error(`Get User By Email: ${err.message}`)
+    }
+}
