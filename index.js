@@ -29,6 +29,7 @@ app.use('/auth', require('./routes/auth_route'))
 app.use('/user', require('./routes/user_route'))
 app.use('/address', require('./routes/address_route'))
 app.use('/drug-allergy', require('./routes/drug_allergy_route'))
+app.use('/congenital-disease', require('./routes/congenital_route'))
 
 const PORT = process.env.PORT || 8000
 
