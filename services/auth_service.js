@@ -1,13 +1,8 @@
-const bcrypt = require('bcryptjs');
 const userService = require('./user_service')
 const addressService = require('./address_service')
 const drugAllergyService = require('./drug_allergy_service')
 const congenitalDiseaseService = require('./congenital_service')
 const personalAddrService = require('./personal_addr_service')
-
-const comparePassword = (password, hashedPassword) => {
-    return bcrypt.compareSync(password, hashedPassword)
-}
 
 export const signup = async (req) => {
     let { title, firstname, lastname, dob, gender, phone, height, weight, email, password, address, drugAllergy, congenitalDisease } = req.body
