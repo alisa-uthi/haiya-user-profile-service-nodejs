@@ -31,6 +31,20 @@ router.get('/:userId', async (req, res) => {
     }
 })
 
+// Update User General Information by ID
+router.put('/:userId', async (req, res) => {
+  try {
+      const userId = req.params.userId
+
+      await userService.updatePerson(req.body, userId)
+      const result = await userService.getUserById(userId)
+      
+      res.status(200).json({ data: result })
+  } catch (error) {
+      res.status(500).json({ error: error.message })
+  }
+})
+
 // Update profile image
 router.patch('/:userId/image', upload.single('image'), async (req, res) => {
     const filePath = `public/uploads/profile_image/${req.file.filename}`

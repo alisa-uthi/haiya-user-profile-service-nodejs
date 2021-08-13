@@ -7,7 +7,7 @@ const hashPassword = (password) => {
 }
 
 export const insertPerson = async (data) => {
-    const query = 'INSERT INTO Person (Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Password, Psn_Phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+    let query = 'INSERT INTO Person (Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Password, Psn_Phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
     
     try {
         const hashedPassword = hashPassword(data.password)
@@ -25,22 +25,24 @@ export const insertPerson = async (data) => {
     }
 }
 
-export const UpdatePerson = async (data) => {
-    const query = 'UPDATE Person Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Password, Psn_Phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+export const updatePerson = async (data, userId) => {
+    let query = 'UPDATE Person '
+    query += 'SET Psn_Title = ?, Psn_Fname = ?, Psn_Lname = ?, Psn_DoB = ?, '
+    query += 'Psn_Gender = ?, Psn_Height = ?, Psn_Weight = ?, '
+    query += 'Psn_Email = ?, Psn_Phone = ? '
+    query += 'WHERE ID = ? ;'
     
     try {
-        const hashedPassword = hashPassword(data.password)
-  
         const result = await connection.promise().execute(
             query,
             [
                 data.title, data.firstname, data.lastname, data.dob, data.gender, 
-                data.height, data.weight, data.email, hashedPassword, data.phone,
+                data.height, data.weight, data.email, data.phone, userId
             ],
         );
-        return result[0].insertId
+        return result[0][0]
     } catch (err) {
-        throw new Error(`Insert Person: ${err.message}`)
+        throw new Error(`Update Person: ${err.message}`)
     }
 }
 
