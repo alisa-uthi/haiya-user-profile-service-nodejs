@@ -67,4 +67,5 @@ router.get('/:userId/image', passport.authenticate('jwt', {session: false}), asy
     }
 })
 
+
 module.exports = router
