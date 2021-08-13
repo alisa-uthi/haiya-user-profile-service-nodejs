@@ -85,4 +85,14 @@ router.get('/:userId/image', async (req, res) => {
     }
 })
 
+// Update user password
+router.get('/:userId/password', async (req, res) => {
+  try {
+    await userService.updateUserPassword(req.params.userId, req.body.newPassword)
+    res.status(200).json({ data: "Your password has been updated." })
+  } catch(error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 module.exports = router

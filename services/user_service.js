@@ -104,4 +104,17 @@ export const getProfileImage = async (id) => {
     }
 }
 
+export const updatetUserPassword = async (id, newPassword) => {
+    let query = 'UPDATE Person Set Psn_Password = ? WHERE ID = ? ;'
+    
+    try {
+        const hashedPassword = hashPassword(newPassword)
+        await connection.promise().execute(
+            query,
+            [id, hashedPassword],
+        );
+    } catch (err) {
+        throw new Error(`Update User Password: ${err.message}`)
+    }
+}
 
