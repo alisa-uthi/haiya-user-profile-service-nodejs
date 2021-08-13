@@ -25,6 +25,25 @@ export const insertPerson = async (data) => {
     }
 }
 
+export const UpdatePerson = async (data) => {
+    const query = 'UPDATE Person Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Password, Psn_Phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
+    
+    try {
+        const hashedPassword = hashPassword(data.password)
+  
+        const result = await connection.promise().execute(
+            query,
+            [
+                data.title, data.firstname, data.lastname, data.dob, data.gender, 
+                data.height, data.weight, data.email, hashedPassword, data.phone,
+            ],
+        );
+        return result[0].insertId
+    } catch (err) {
+        throw new Error(`Insert Person: ${err.message}`)
+    }
+}
+
 export const getUserById = async (id) => {
     let query = ''
     query += 'SELECT ID, Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Phone, Psn_Image '
@@ -38,6 +57,20 @@ export const getUserById = async (id) => {
         return result[0][0]
     } catch (err) {
         throw new Error(`Get User by id: ${err.message}`)
+    }
+}
+
+export const getUserByEmail = async (email) => {
+    let query = 'SELECT ID, Psn_Email, Psn_Password FROM Person WHERE Psn_Email = ? ;'
+    
+    try {
+        const result = await connection.promise().execute(
+            query,
+            [email],
+        );
+        return result[0][0]
+    } catch (err) {
+        throw new Error(`Get User By Email: ${err.message}`)
     }
 }
 
@@ -69,16 +102,4 @@ export const getProfileImage = async (id) => {
     }
 }
 
-export const getUserByEmail = async (email) => {
-    let query = 'SELECT ID, Psn_Email, Psn_Password FROM Person WHERE Psn_Email = ? ;'
-    
-    try {
-        const result = await connection.promise().execute(
-            query,
-            [email],
-        );
-        return result[0][0]
-    } catch (err) {
-        throw new Error(`Get User By Email: ${err.message}`)
-    }
-}
+
