@@ -24,6 +24,34 @@ export const getCongenitalDisByUserId = async (id) => {
         );
         return result[0]
     } catch (err) {
-        throw new Error(`Get Profile Image: ${err.message}`)
+        throw new Error(`Get Congenital Disease By User ID: ${err.message}`)
+    }
+}
+
+export const getCongenitalDiseaseById = async (congenitalId) => {
+    let query = 'SELECT ID, Cdi_Name, Cdi_Reaction, Cdi_Severity FROM Congenital_Disease WHERE ID = ? ;'
+    
+    try {
+        const result = await connection.promise().execute(
+            query,
+            [congenitalId],
+        );
+        return result[0][0]
+    } catch (err) {
+        throw new Error(`Get Congenital Disease By ID: ${err.message}`)
+    }
+}
+
+export const updatetCongenitalDisease = async (congenital, congenitalId) => {
+    let query = 'UPDATE Congenital_Disease SET '
+    query += 'Cdi_Name = ?, Cdi_Reaction = ?, Cdi_Severity = ? WHERE ID = ? ;'
+    
+    try {
+        await connection.promise().execute(
+            query,
+            [ congenital.name, congenital.reaction, congenital.severity, congenitalId ],
+        );
+    } catch (err) {
+        throw new Error(`Update Congenital Disease By ID: ${err.message}`)
     }
 }

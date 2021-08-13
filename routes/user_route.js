@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const passport = require('passport')
 const upload = require('../config/multer')
 
 const userService = require('../services/user_service')
@@ -58,7 +57,7 @@ router.patch('/:userId/image', upload.single('image'), async (req, res) => {
 })
 
 // Get profile image
-router.get('/:userId/image', passport.authenticate('jwt', {session: false}), async (req, res) => {
+router.get('/:userId/image', async (req, res) => {
     try {
       const result = await userService.getProfileImage(req.params.userId)
       res.status(200).json({ data: result })

@@ -28,13 +28,13 @@ export const getDrugAlleryByUserId = async (id) => {
     }
 }
 
-export const getDrugAlleryById = async (id) => {
+export const getDrugAlleryById = async (allergyId) => {
     let query = 'SELECT ID, Dal_Name, Dal_Reaction, Dal_Severity FROM Drug_Allergy WHERE ID = ? ;'
     
     try {
         const result = await connection.promise().execute(
             query,
-            [id],
+            [allergyId],
         );
         return result[0][0]
     } catch (err) {
