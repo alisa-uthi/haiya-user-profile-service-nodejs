@@ -1,4 +1,4 @@
-var mysql      = require('mysql2');
+var mysql = require('mysql2');
 
 var mysqlHost = process.env.MYSQL_HOST || 'localhost';
 var mysqlPort = process.env.MYSQL_PORT || '3306';

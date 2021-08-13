@@ -14,13 +14,11 @@ router.get('/:userId', async (req, res) => {
         const userId = req.params.userId
 
         const user = await userService.getUserById(userId)
-        const address = await addressService.getAddressByUserId(userId)
         const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(userId)
         const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(userId)
         
         const result = {
           user,
-          address,
           drugAllergy,
           congenitalDisease
         }
