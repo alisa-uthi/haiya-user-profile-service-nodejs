@@ -4,7 +4,6 @@ const upload = require('../config/multer')
 const bucket = require('../config/firebase')
 
 const userService = require('../services/user_service')
-const addressService = require('../services/address_service')
 const drugAllergyService = require('../services/drug_allergy_service')
 const congenitalDiseaseService = require('../services/congenital_service')
 

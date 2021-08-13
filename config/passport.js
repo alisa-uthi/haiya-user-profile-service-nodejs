@@ -7,6 +7,8 @@ const JWTStrategy = passportJWT.Strategy
 const ExtractJWT  = passportJWT.ExtractJwt
 
 const userService = require('../services/user_service')
+const drugAllergyService = require('../services/drug_allergy_service')
+const congenitalDiseaseService = require('../services/congenital_service')
 
 passport.use(
     new LocalStrategy({ 
@@ -29,7 +31,15 @@ passport.use(
             if(err) throw err
             if(isMatched){
                 const user = await userService.getUserById(result.ID)
-                return done(null, user)
+                const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(result.ID)
+                const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(result.ID)
+                
+                const userInfo = {
+                    user,
+                    drugAllergy,
+                    congenitalDisease
+                }
+                return done(null, userInfo)
             } else {
                 return done(null, false, {
                     message: 'Password is incorrect'
@@ -50,7 +60,15 @@ passport.use(new JWTStrategy({
         try {
             const user = await userService.getUserById(jwtPayload.user.ID)
             if(user) {
-                return done(null, user);
+                const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(jwtPayload.user.ID)
+                const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(jwtPayload.user.ID)
+                
+                const result = {
+                    user,
+                    drugAllergy,
+                    congenitalDisease
+                }
+                return done(null, result);
             }
         } catch (error) {
             return done(err, false);
