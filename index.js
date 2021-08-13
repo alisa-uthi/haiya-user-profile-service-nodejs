@@ -30,14 +30,6 @@ app.use('/user', require('./routes/user_route'))
 app.use('/address', require('./routes/address_route'))
 app.use('/drug-allergy', require('./routes/drug_allergy_route'))
 
-
-app.get('/', async (req, res) => {
-    connection.query('show databases; show tables;', (err, results, fields) => {
-        if(err) return res.json({message: err.message})
-        return res.json({results})
-    });
-})
-
 const PORT = process.env.PORT || 8000
 
 app.listen(PORT, () => {
