@@ -52,7 +52,7 @@ export const requestPasswordReset = async (email) => {
     await tokenService.insertTokenByUserId(hashedToken, user.ID)
   
     // Send email
-    const link = `vuejs-basic-shopping.netlify.app/?token=${resetToken}&id=${user.ID}`
+    const link = `haiya-reset-password.netlify.app/?token=${resetToken}&id=${user.ID}`
 
     sendSmtpEmail = {
         to: [{
