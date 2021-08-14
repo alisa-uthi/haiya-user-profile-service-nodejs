@@ -27,4 +27,38 @@ router.post('/signin', (req, res, next) => {
     })(req, res, next);
 })
 
+// Request reset password
+router.post('/request-reset-password', async (req, res) => {
+    try {
+        const messageId = await authService.requestPasswordReset(req.body.email)
+        if(messageId) {
+            return res.status(200).json({ 
+                message: "Your password reset request has been sent.",
+                messageId
+            })
+        }
+        res.status(500).json({ error: "Unable to request password reset." })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+// Reset password
+router.post('/:userId/reset-password', async (req, res) => {
+    const { token, password } = req.body
+
+    try {
+        const messageId = await authService.resetPassword(req.params.userId, token, password)
+        if(messageId) {
+            return res.status(200).json({ 
+                message: "Your password has been changed.",
+                messageId
+            })
+        }
+        res.status(500).json({ error: "Unable to reset password." })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
 module.exports = router
