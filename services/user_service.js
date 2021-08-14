@@ -63,7 +63,7 @@ export const getUserById = async (id) => {
 }
 
 export const getUserByEmail = async (email) => {
-    let query = 'SELECT ID, Psn_Email, Psn_Password FROM Person WHERE Psn_Email = ? ;'
+    let query = 'SELECT ID, Psn_Email, Psn_Password, Psn_Fname, Psn_Lname FROM Person WHERE Psn_Email = ? ;'
     
     try {
         const result = await connection.promise().execute(
@@ -104,4 +104,18 @@ export const getProfileImage = async (id) => {
     }
 }
 
+export const updatetUserPassword = async (id, newPassword) => {
+    let query = 'UPDATE Person Set Psn_Password=? WHERE ID=?;'
+    
+    try {
+        const hashedPassword = hashPassword(newPassword)
+        
+        await connection.promise().execute(
+            query,
+            [hashedPassword, id],
+        );
+    } catch (err) {
+        throw new Error(`Update User Password: ${err.message}`)
+    }
+}
 
