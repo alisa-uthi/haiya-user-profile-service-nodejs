@@ -17,7 +17,7 @@ export const insertAddress = async (address) => {
 
 export const getAddressById = async (id) => {
     let query = 'SELECT ID, Addr_Name, Addr_Location, Addr_AdditionalInfo, Addr_Latitude, Addr_Longitude '
-    query += 'FROM Address WHERE ID = ?'
+    query += 'FROM Address WHERE ID = ? ;'
     
     try {
         const result = await connection.promise().execute(
