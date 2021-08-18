@@ -38,11 +38,11 @@ export const signup = async (req) => {
 export const requestPasswordReset = async (email) => {
     // Find email to check if it exists
     const user = await userService.getUserByEmail(email)
-    if (!Object.keys(user).length) throw new Error("Email does not exist.")
+    if (!user) throw new Error("Email does not exist.")
 
     // Find token of this user. If found, delete it
     const token = await tokenService.getTokenByUserId(user.ID)
-    if (Object.keys(token).length) await tokenService.deleteTokenByUserId(user.ID)
+    if (token) await tokenService.deleteTokenByUserId(user.ID)
 
     // Generate token
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -85,7 +85,7 @@ export const resetPassword = async (userId, token, password) => {
 
     // Find token of this user
     let passwordResetToken = await tokenService.getTokenByUserId(userId)
-    if (!Object.keys(passwordResetToken).length) {
+    if (!passwordResetToken) {
       throw new Error("Invalid or expired password reset token.");
     }
   

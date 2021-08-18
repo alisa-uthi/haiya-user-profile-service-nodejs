@@ -64,7 +64,8 @@ router.patch('/:userId/image', upload.single('image'), async (req, res) => {
         expires: '12-31-2030'
       };
       var url = await fileUpload.getSignedUrl(options)
-      const result = await userService.updateProfileImage(req.params.userId, url[0])
+      await userService.updateProfileImage(req.params.userId, url[0])
+      const result = await userService.getProfileImage(req.params.userId)
       res.status(200).json({ data: result })
     } catch(error) {
       res.status(500).json({ error: error.message })

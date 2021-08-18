@@ -34,12 +34,10 @@ passport.use(
                 const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(result.ID)
                 const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(result.ID)
                 
-                const userInfo = {
-                    user,
-                    drugAllergy,
-                    congenitalDisease
-                }
-                return done(null, userInfo)
+                user.drugAllergy = drugAllergy
+                user.congenitalDisease = congenitalDisease
+                
+                return done(null, user)
             } else {
                 return done(null, false, {
                     message: 'Password is incorrect'
