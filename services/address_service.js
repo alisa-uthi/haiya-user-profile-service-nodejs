@@ -19,7 +19,7 @@ export const getAddressById = async (id) => {
     let query = 'SELECT a.ID, a.Addr_Name, a.Addr_Location, a.Addr_AdditionalInfo, '
     query += 'a.Addr_Latitude, a.Addr_Longitude, pa.Psn_ID, pa.IsDeliveryAddress '
     query += 'FROM Address a '
-    query += 'INNER JOIN Personal_Addr pa ON pa.Addr_ID = a.ID '
+    query += 'LEFT JOIN Personal_Addr pa ON pa.Addr_ID = a.ID '
     query += 'WHERE ID = ?;'
     
     try {
