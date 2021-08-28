@@ -16,8 +16,11 @@ export const insertAddress = async (address) => {
 }
 
 export const getAddressById = async (id) => {
-    let query = 'SELECT ID, Addr_Name, Addr_Location, Addr_AdditionalInfo, Addr_Latitude, Addr_Longitude '
-    query += 'FROM Address WHERE ID = ? ;'
+    let query = 'SELECT a.ID, a.Addr_Name, a.Addr_Location, a.Addr_AdditionalInfo, '
+    query += 'a.Addr_Latitude, a.Addr_Longitude, pa.Psn_ID, pa.IsDeliveryAddress '
+    query += 'FROM Address a '
+    query += 'INNER JOIN Personal_Addr pa ON pa.Addr_ID = a.ID '
+    query += 'WHERE ID = ?;'
     
     try {
         const result = await connection.promise().execute(
@@ -31,7 +34,8 @@ export const getAddressById = async (id) => {
 }
 
 export const getAddressByUserId = async (id) => {
-    let query = 'SELECT a.ID, a.Addr_Name, a.Addr_Location, a.Addr_AdditionalInfo, a.Addr_Latitude, a.Addr_Longitude '
+    let query = 'SELECT a.ID, a.Addr_Name, a.Addr_Location, a.Addr_AdditionalInfo, '
+    query += 'a.Addr_Latitude, a.Addr_Longitude, pa.Psn_ID, pa.IsDeliveryAddress '
     query += 'FROM Address a '
     query += 'INNER JOIN Personal_Addr pa ON pa.Addr_ID = a.ID '
     query += `WHERE pa.Psn_ID = ? AND pa.FlagDelete = 'N';`
@@ -62,6 +66,21 @@ export const updateAddressById = async (address, addressId) => {
     }
 }
 
+export const insertPersonalAddress = async (userId, addressId, isDeliveryAddress) => {
+    const query = 'INSERT INTO Personal_Addr (Psn_ID, Addr_ID, IsDeliveryAddress) VALUES (?, ?, ?);'
+
+    try {
+        const result = await connection.promise().execute(
+            query,
+            [ userId, addressId, isDeliveryAddress ],
+        );
+
+        return result[0].insertId
+    } catch (err) {
+        throw new Error(`Insert Personal Address: ${err.message}`)
+    }
+}
+
 export const updateFlagDelete = async (addressId) => {
     let query = `UPDATE Personal_Addr SET FlagDelete = 'Y'`
     query += 'WHERE Addr_ID = ? ;'
@@ -73,5 +92,19 @@ export const updateFlagDelete = async (addressId) => {
         );
     } catch (err) {
         throw new Error(`Update Flag Delete of the Address By Address Id: ${err.message}`)
+    }
+}
+
+export const updateDeliveryAddress = async (addressId, isDeliveryAddress) => {
+    let query = 'UPDATE Personal_Addr SET IsDeliveryAddress = ?'
+    query += 'WHERE Addr_ID = ? ;'
+    
+    try {
+        await connection.promise().execute(
+            query,
+            [ isDeliveryAddress, addressId ],
+        );
+    } catch (err) {
+        throw new Error(`Update Delivery Address Status of the Address By Address Id: ${err.message}`)
     }
 }

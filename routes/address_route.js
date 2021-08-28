@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const addressService = require('../services/address_service')
-const personalAddrService = require('../services/personal_addr_service')
 
 // Get address by address id
 router.get('/:addressId', async (req, res) => {
@@ -21,6 +20,16 @@ router.put('/:addressId', async (req, res) => {
         await addressService.updateAddressById(req.body, addressId)
         const result = await addressService.getAddressById(addressId)
   
+        res.status(200).json({ data: result })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+// Update delivery address by user id
+router.patch('/:addressId', async (req, res) => {
+    try {
+        const result = await addressService.updateDeliveryAddress(req.params.addressId, req.body.isDeliveryAddress)
         res.status(200).json({ data: result })
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -51,7 +60,7 @@ router.get('/user/:userId', async (req, res) => {
 router.post('/user/:userId', async (req, res) => {
     try {
         const addressId = await addressService.insertAddress(req.body)
-        await personalAddrService.insertPersonalAddress(req.params.userId, addressId)
+        await addressService.insertPersonalAddress(req.params.userId, addressId, req.body.isDeliveryAddress)
         
         res.status(200).json({ data: "This address is added successfully." })
     } catch (error) {
