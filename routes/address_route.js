@@ -29,7 +29,10 @@ router.put('/:addressId', async (req, res) => {
 // Update delivery address by user id
 router.patch('/:addressId', async (req, res) => {
     try {
-        const result = await addressService.updateDeliveryAddress(req.params.addressId, req.body.isDeliveryAddress)
+        const { addressId } = req.params
+        const { userId, isDeliveryAddress } = req.body
+        
+        const result = await addressService.updateDeliveryAddress(userId, addressId, isDeliveryAddress)
         res.status(200).json({ data: result })
     } catch (error) {
         res.status(500).json({ error: error.message })

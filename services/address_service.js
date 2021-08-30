@@ -95,13 +95,20 @@ export const updateFlagDelete = async (addressId) => {
     }
 }
 
-export const updateDeliveryAddress = async (addressId, isDeliveryAddress) => {
-    let query = 'UPDATE Personal_Addr SET IsDeliveryAddress = ?'
-    query += 'WHERE Addr_ID = ? ;'
+export const updateDeliveryAddress = async (userId, addressId, isDeliveryAddress) => {
+    let query1 = 'UPDATE Personal_Addr SET IsDeliveryAddress = "N" '
+    query1 += 'WHERE Psn_ID = ? ;'
+    
+    let query2 = 'UPDATE Personal_Addr SET IsDeliveryAddress = ? '
+    query2 += 'WHERE Addr_ID = ? ;'
     
     try {
         await connection.promise().execute(
-            query,
+            query1,
+            [ userId ],
+        );
+        await connection.promise().execute(
+            query2,
             [ isDeliveryAddress, addressId ],
         );
     } catch (err) {
