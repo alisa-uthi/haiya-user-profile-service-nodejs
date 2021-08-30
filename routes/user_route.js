@@ -13,11 +13,9 @@ router.get('/:userId', async (req, res) => {
         const userId = req.params.userId
 
         const user = await userService.getUserById(userId)
-        const userImage = await userService.getProfileImage(userId)
         const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(userId)
         const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(userId)
         
-        user.Psn_Image = userImage.Psn_Image
         user.Psn_DrugAllergy = drugAllergy
         user.Psn_CongenitalDisease = congenitalDisease
 
@@ -31,11 +29,16 @@ router.get('/:userId', async (req, res) => {
 router.put('/:userId', async (req, res) => {
   try {
       const userId = req.params.userId
-
       await userService.updatePerson(req.body, userId)
-      const result = await userService.getUserById(userId)
+
+      const user = await userService.getUserById(userId)
+      const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(userId)
+      const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(userId)
+
+      user.Psn_DrugAllergy = drugAllergy
+      user.Psn_CongenitalDisease = congenitalDisease
       
-      res.status(200).json({ data: result })
+      res.status(200).json({ data: user })
   } catch (error) {
       res.status(500).json({ error: error.message })
   }

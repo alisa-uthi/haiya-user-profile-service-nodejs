@@ -34,8 +34,8 @@ passport.use(
                 const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(result.ID)
                 const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(result.ID)
                 
-                user.drugAllergy = drugAllergy
-                user.congenitalDisease = congenitalDisease
+                user.Psn_DrugAllergy = drugAllergy
+                user.Psn_CongenitalDisease = congenitalDisease
                 
                 return done(null, user)
             } else {
