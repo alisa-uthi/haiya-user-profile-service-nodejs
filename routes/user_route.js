@@ -91,8 +91,17 @@ router.get('/:userId/image', async (req, res) => {
 // Update user password
 router.patch('/:userId/password', async (req, res) => {
   try {
-    await userService.updateUserPassword(req.params.userId, req.body.newPassword)
-    res.status(200).json({ data: "Your password has been updated." })
+    const { userId } = req.params
+    const { oldPassword, newPassword } = req.body
+    
+    const currentPassword = await userService.getUserPasswordById(userId)
+    if(currentPassword) {
+      const isUpdated = await userService.updateUserPassword(userId, oldPassword, currentPassword, newPassword)
+      if(isUpdated) {
+        res.status(200).json({ data: "Your password has been updated." })
+      }
+    }
+    res.status(400).json({ error: "Old Password is incorrect." })
   } catch(error) {
     res.status(500).json({ error: error.message })
   }

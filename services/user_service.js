@@ -104,16 +104,37 @@ export const getProfileImage = async (id) => {
     }
 }
 
-export const updatetUserPassword = async (id, newPassword) => {
+export const getUserPasswordById = async (id) => {
+    let query = 'SELECT Psn_Password FROM Person WHERE ID = ? ;'
+    
+    try {
+        const result = await connection.promise().execute(
+            query,
+            [id],
+        );
+        return result[0][0].Psn_Password
+    } catch (err) {
+        throw new Error(`Get User Password By Id: ${err.message}`)
+    }
+}
+
+export const updateUserPassword = async (id, oldPassword, currentPassword, newPassword) => {
     let query = 'UPDATE Person Set Psn_Password=? WHERE ID=?;'
     
     try {
-        const hashedPassword = hashPassword(newPassword)
-        
-        await connection.promise().execute(
-            query,
-            [hashedPassword, id],
-        );
+        var isMatched = await bcrypt.compare(oldPassword, currentPassword)
+
+        if(isMatched) {
+            const hashedPassword = hashPassword(newPassword)
+            
+            await connection.promise().execute(
+                query,
+                [hashedPassword, id],
+            );
+            return true
+        }
+
+        return false
     } catch (err) {
         throw new Error(`Update User Password: ${err.message}`)
     }
