@@ -98,10 +98,10 @@ router.patch('/:userId/password', async (req, res) => {
     if(currentPassword) {
       const isUpdated = await userService.updateUserPassword(userId, oldPassword, currentPassword, newPassword)
       if(isUpdated) {
-        res.status(200).json({ data: "Your password has been updated." })
+        return res.status(200).json({ data: "Your password has been updated." })
       }
     }
-    res.status(400).json({ error: "Old Password is incorrect." })
+    return res.status(400).json({ error: "Old Password is incorrect." })
   } catch(error) {
     res.status(500).json({ error: error.message })
   }
