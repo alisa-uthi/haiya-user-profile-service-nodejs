@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const passport = require('passport')
+require('./config/passport')
 const connection = require('./config/database')
 const app = express()
 
@@ -21,10 +23,10 @@ require('./config/passport')
 
 // Routes
 app.use('/auth', require('./routes/auth_route'))
-app.use('/profile', require('./routes/user_route'))
-app.use('/address', require('./routes/address_route'))
-app.use('/drug-allergy', require('./routes/drug_allergy_route'))
-app.use('/congenital-disease', require('./routes/congenital_route'))
+app.use('/profile', passport.authenticate('jwt', {session: false}), require('./routes/user_route'))
+app.use('/address', passport.authenticate('jwt', {session: false}), require('./routes/address_route'))
+app.use('/drug-allergy', passport.authenticate('jwt', {session: false}), require('./routes/drug_allergy_route'))
+app.use('/congenital-disease', passport.authenticate('jwt', {session: false}), require('./routes/congenital_route'))
 
 const PORT = process.env.PORT || 8000
 

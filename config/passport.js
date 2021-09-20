@@ -56,20 +56,9 @@ passport.use(new JWTStrategy({
     },
     async (jwtPayload, done) => {
         try {
-            const user = await userService.getUserById(jwtPayload.user.ID)
-            if(user) {
-                const drugAllergy = await drugAllergyService.getDrugAlleryByUserId(jwtPayload.user.ID)
-                const congenitalDisease = await congenitalDiseaseService.getCongenitalDisByUserId(jwtPayload.user.ID)
-                
-                const result = {
-                    user,
-                    drugAllergy,
-                    congenitalDisease
-                }
-                return done(null, result);
-            }
+            return done(null, jwtPayload.userId);
         } catch (error) {
-            return done(err, false);
+            return done(error, false);
         }
     }
 ))

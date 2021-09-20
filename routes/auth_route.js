@@ -19,7 +19,7 @@ router.post('/signin', (req, res, next) => {
     passport.authenticate('local', {session: false}, (err, user, info) => {
         if (err) return next(err)
         if(user) {
-            const token = jwt.sign({ user }, process.env.JWT_SECRET)
+            const token = jwt.sign({ userId: user.ID }, process.env.JWT_SECRET)
             return res.status(200).json({user, token})
         } else {
             return res.status(422).json({ error: info })
