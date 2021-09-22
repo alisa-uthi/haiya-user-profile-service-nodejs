@@ -96,7 +96,7 @@ export const resetPassword = async (userId, token, password) => {
     }
   
     // Update user password
-    await userService.updatetUserPassword(userId, password)
+    await userService.updatePasswordWithoutCompareOldPwd(userId, password)
   
     // Get user info to send email
     const user = await userService.getUserById(userId)

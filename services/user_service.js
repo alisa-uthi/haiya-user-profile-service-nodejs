@@ -140,3 +140,18 @@ export const updateUserPassword = async (id, oldPassword, currentPassword, newPa
     }
 }
 
+export const updatePasswordWithoutCompareOldPwd = async (id, newPassword) => {
+    let query = 'UPDATE Person Set Psn_Password=? WHERE ID=?;'
+    
+    try {
+        const hashedPassword = hashPassword(newPassword)
+        
+        await connection.promise().execute(
+            query,
+            [hashedPassword, id],
+        );
+        return true
+    } catch (err) {
+        throw new Error(`Update User Password: ${err.message}`)
+    }
+}
