@@ -8,14 +8,14 @@ const hashPassword = (password) => {
 
 export const insertPerson = async (data) => {
     let query = 'INSERT INTO Person (Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Password, Psn_Phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);'
-    
+
     try {
         const hashedPassword = hashPassword(data.password)
-  
+
         const result = await connection.promise().execute(
             query,
             [
-                data.title, data.firstname, data.lastname, data.dob, data.gender, 
+                data.title, data.firstname, data.lastname, data.dob, data.gender,
                 data.height, data.weight, data.email, hashedPassword, data.phone,
             ],
         );
@@ -28,16 +28,15 @@ export const insertPerson = async (data) => {
 export const updatePerson = async (data, userId) => {
     let query = 'UPDATE Person '
     query += 'SET Psn_Title = ?, Psn_Fname = ?, Psn_Lname = ?, Psn_DoB = ?, '
-    query += 'Psn_Gender = ?, Psn_Height = ?, Psn_Weight = ?, '
-    query += 'Psn_Email = ?, Psn_Phone = ? '
+    query += 'Psn_Gender = ?, Psn_Height = ?, Psn_Weight = ?,  Psn_Phone = ? '
     query += 'WHERE ID = ? ;'
-    
+
     try {
         const result = await connection.promise().execute(
             query,
             [
-                data.title, data.firstname, data.lastname, data.dob, data.gender, 
-                data.height, data.weight, data.email, data.phone, userId
+                data.title, data.firstname, data.lastname, data.dob, data.gender,
+                data.height, data.weight, data.phone, userId
             ],
         );
         return result[0][0]
@@ -50,7 +49,7 @@ export const getUserById = async (id) => {
     let query = ''
     query += 'SELECT ID, Psn_Title, Psn_Fname, Psn_Lname, Psn_DoB, Psn_Gender, Psn_Height, Psn_Weight, Psn_Email, Psn_Phone, Psn_Image '
     query += 'FROM Person WHERE ID = ?;'
-    
+
     try {
         const result = await connection.promise().execute(
             query,
@@ -64,7 +63,7 @@ export const getUserById = async (id) => {
 
 export const getUserByEmail = async (email) => {
     let query = 'SELECT ID, Psn_Email, Psn_Password, Psn_Fname, Psn_Lname FROM Person WHERE Psn_Email = ? ;'
-    
+
     try {
         const result = await connection.promise().execute(
             query,
@@ -78,7 +77,7 @@ export const getUserByEmail = async (email) => {
 
 export const updateProfileImage = async (id, imagePath) => {
     let query = 'UPDATE Person SET Psn_Image = ? WHERE ID = ? ;'
-    
+
     try {
         const result = await connection.promise().execute(
             query,
@@ -92,7 +91,7 @@ export const updateProfileImage = async (id, imagePath) => {
 
 export const getProfileImage = async (id) => {
     let query = 'SELECT Psn_Image FROM Person WHERE ID = ? ;'
-    
+
     try {
         const result = await connection.promise().execute(
             query,
@@ -106,7 +105,7 @@ export const getProfileImage = async (id) => {
 
 export const getUserPasswordById = async (id) => {
     let query = 'SELECT Psn_Password FROM Person WHERE ID = ? ;'
-    
+
     try {
         const result = await connection.promise().execute(
             query,
@@ -120,13 +119,13 @@ export const getUserPasswordById = async (id) => {
 
 export const updateUserPassword = async (id, oldPassword, currentPassword, newPassword) => {
     let query = 'UPDATE Person Set Psn_Password=? WHERE ID=?;'
-    
+
     try {
         var isMatched = await bcrypt.compare(oldPassword, currentPassword)
 
         if(isMatched) {
             const hashedPassword = hashPassword(newPassword)
-            
+
             await connection.promise().execute(
                 query,
                 [hashedPassword, id],
@@ -142,10 +141,10 @@ export const updateUserPassword = async (id, oldPassword, currentPassword, newPa
 
 export const updatePasswordWithoutCompareOldPwd = async (id, newPassword) => {
     let query = 'UPDATE Person Set Psn_Password=? WHERE ID=?;'
-    
+
     try {
         const hashedPassword = hashPassword(newPassword)
-        
+
         await connection.promise().execute(
             query,
             [hashedPassword, id],
